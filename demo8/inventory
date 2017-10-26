@@ -1,4 +1,4 @@
-web01 ansible_ssh_host=172.31.0.11 
+web01 ansible_ssh_host=192.168.100.208
 db01 ansible_ssh_host=172.31.0.12 
 
 
@@ -17,5 +17,5 @@ dbservers
 
 # Let's creat a varible for group datacenter
 [datacenter:vars]
-ansible_ssh_user=vagrant
-ansible_ssh_pass=vagrant
+ansible_ssh_user=root
+ansible_ssh_pass=redhat

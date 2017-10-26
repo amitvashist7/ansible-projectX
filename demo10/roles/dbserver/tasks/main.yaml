@@ -1,0 +1,8 @@
+---
+- name: Install MariaDB Packages
+  yum: name=mariadb-server state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Start MariaDB Service
+  service: name=mariadb state=started enabled=True
+

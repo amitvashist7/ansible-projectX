@@ -1,0 +1,8 @@
+---
+- hosts: datacenter
+  sudo: yes
+  roles: 
+  - server-common
+
+- include: webserver.yaml
+- include: dbserver.yaml

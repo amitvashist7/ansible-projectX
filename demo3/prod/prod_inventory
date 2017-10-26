@@ -1,0 +1,23 @@
+web01 ansible_ssh_host=172.31.0.11 
+web02 ansible_ssh_host=172.31.0.13 
+db01 ansible_ssh_host=172.31.0.12 
+
+
+[webserver]
+web01
+web02
+
+[dbserver]
+db01
+
+
+# Let's create a parent group as datacenter
+[datacenter:children]
+webserver
+dbserver
+
+
+# Let's creat a varible for group datacenter
+[datacenter:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_pass=vagrant

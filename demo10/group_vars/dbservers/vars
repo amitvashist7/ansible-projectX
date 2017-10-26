@@ -1,0 +1,8 @@
+---
+# nonsensitive data
+mysql_port: 3306
+mysql_host: 10.0.0.3
+mysql_user: fred
+
+# sensitive data
+mysql_password: "{{ vault_mysql_password }}"

@@ -1,0 +1,38 @@
+---
+- hosts: mailservers
+  vars:
+    maildir_path: /home/john/Maildir
+    maildir: /home/student/Maildir
+    mail_package: postfix
+    mail_service: postfix
+
+
+  tasks: 
+    - block: 
+      - name: Create {{ maildir_path }}
+        copy:
+          src: "{{ maildir }}"
+          dest: "{{ maildir_path }}"
+          mode: 0755
+
+      rescue:
+      - name: Install Mail Packages
+        yum: 
+          name: "{{ item }}"
+          state: latest
+        with_items:
+          - "{{ mail_package }}"
+          - dovecot
+
+      always: 
+      - name: Start the Mail Services
+        service: 
+          name: "{{item}}"
+          state: started
+        with_items:
+          - "{{ mail_package }}"
+          - dovecot
+        register: command_result
+
+    - debug: 
+        var: command_result

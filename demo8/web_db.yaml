@@ -7,10 +7,6 @@
     doc_root: /var/www/html/ansible
     doc_dir: /ansible/
 
-  vars_prompt:
-  - name: username
-    prompt: What is your name ?
-
   tasks:
   - name: Install Apache Packages
     yum: name=httpd state=present
@@ -37,18 +33,8 @@
   - name: Restart Apache
     service: name=httpd state=restarted
 
-- hosts: dbservers
-  sudo: yes
 
-  tasks: 
-  - name: Install MariaDB Packages 
-    yum: name=mariadb-server state=present
-    when: ansible_os_family == "RedHat"
-
-  - name: Start MariaDB Service
-    service: name=mariadb state=started enabled=True
-
-- hosts: webservers:dbservers
+- hosts: webservers
   sudo: yes
 
   tasks: 

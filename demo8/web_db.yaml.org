@@ -1,0 +1,56 @@
+---
+
+- hosts: webservers
+  sudo: yes
+  vars: 
+    http_port: 80
+    doc_root: /var/www/html/ansible
+    doc_dir: /ansible/
+
+  vars_prompt:
+  - name: username
+    prompt: What is your name ?
+
+  tasks:
+  - name: Install Apache Packages
+    yum: name=httpd state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: Start Apache Service
+    service: name=httpd state=started enabled=True
+
+  - name: Creating Site Location
+    file: path={{doc_root}} state=directory
+
+  - name: Deploy Custom Apache Configuration File
+    template: src=templates/httpd.j2 dest=/etc/httpd/conf/httpd.conf
+    notify: 
+    - Restart Apache
+
+  - name: Deploy Site Files
+    template: src=templates/index.j2 dest={{doc_root}}/index.html
+
+  - name: Deploy Site Files
+    template: src=templates/info.j2 dest={{doc_root}}/info.html
+
+  handlers:
+  - name: Restart Apache
+    service: name=httpd state=restarted
+
+- hosts: dbservers
+  sudo: yes
+
+  tasks: 
+  - name: Install MariaDB Packages 
+    yum: name=mariadb-server state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: Start MariaDB Service
+    service: name=mariadb state=started enabled=True
+
+- hosts: webservers:dbservers
+  sudo: yes
+
+  tasks: 
+  - name: STOP the Firewall.!!!
+    service: name=firewalld state=stopped enabled=False
